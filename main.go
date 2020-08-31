@@ -43,7 +43,7 @@ func main() {
 	}
 
 	fmt.Println("serving", root, "on http://"+host+":"+port+"/")
-	panic(http.ListenAndServe(addr, http.FileServer(http.Dir(root))))
+	panic(http.ListenAndServe(addr, noCache(http.FileServer(http.Dir(root)))))
 }
 
 // parseCommandLine
