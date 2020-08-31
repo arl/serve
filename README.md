@@ -12,24 +12,31 @@ Like `python -m SimpleHTTPServer` but _simpler_.
             -h/--help      This help text
 
 
-Example:
+Examples:
 
 * serve the current directory to `localhost:8000`
 
-    serve
+```
+$ serve
+```
 
 
 * serve `/foo/bar` to `localhost:8000`
 
-    serve /foo/bar
+```
+$ serve /foo/bar
+```
 
 
 - serve the current directory to `localhost:7777`
 
-    serve /foo/bar :7777
+```
+$ serve /foo/bar :7777
+```
 
 
 - serve the current directory to `localhost:7777`
 
-    serve . :7777
-
+```
+$ serve . :7777
+```
