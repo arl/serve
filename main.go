@@ -21,8 +21,7 @@ usage: serve [-h] [root] [[host]:port]
         [root]         File server root directory, defaults to current directory
         [[host]:port]  Address to listen on, defaults to "` + defaultAddr + `"
                        "host" can be omitted to listen on all network interfaces.
-        -h/--help      This help text
-`
+        -h/--help      This help text`
 
 func main() {
 	root, addr, help := parseCommandLine(os.Args[1:])

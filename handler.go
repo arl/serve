@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -37,6 +38,7 @@ func noCache(h http.Handler) http.Handler {
 			w.Header().Set(k, v)
 		}
 
+		fmt.Println(r.RequestURI)
 		h.ServeHTTP(w, r)
 	}
 
