@@ -14,28 +14,28 @@ Like `python -m SimpleHTTPServer` but _simpler_.
 
 Examples:
 
-* serve the current directory to `localhost:8000`
+* serve the current directory on localhost and default port (8000)
 
 ```
 $ serve
 ```
 
 
-* serve `/foo/bar` to `localhost:8000`
+* serve `/foo/bar` on localhost and default port (8000)
 
 ```
 $ serve /foo/bar
 ```
 
 
-- serve the current directory to `localhost:7777`
+- serve the current directory on localhost and port 7777
 
 ```
 $ serve /foo/bar :7777
 ```
 
 
-- serve the current directory to `localhost:7777`
+- serve the current directory on localhost and port 7777
 
 ```
 $ serve . :7777
