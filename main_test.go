@@ -11,11 +11,12 @@ func TestParseCommandLine(t *testing.T) {
 		wantRoot string
 		wantAddr string
 		wantHelp bool
+		wantExit int
 	}{
-		{args: []string{"-h"}, wantHelp: true},
-		{args: []string{"a", "b", "c"}, wantHelp: true},
-		{args: nil, wantAddr: defaultAddr, wantRoot: "."},
-		{args: []string{"/foo/bar"}, wantRoot: "/foo/bar", wantAddr: defaultAddr},
+		{args: []string{"-h"}, wantHelp: true, wantExit: 0},
+		{args: []string{"a", "b", "c"}, wantHelp: true, wantExit: 1},
+		{args: nil, wantAddr: defaultHostPort, wantRoot: "."},
+		{args: []string{"/foo/bar"}, wantRoot: "/foo/bar", wantAddr: defaultHostPort},
 		{args: []string{"/foo/bar", "host:port"}, wantRoot: "/foo/bar", wantAddr: "host:port"},
 	}
 
@@ -27,7 +28,8 @@ func TestParseCommandLine(t *testing.T) {
 
 		cli := strings.Join(args, " ")
 		t.Run(cli, func(t *testing.T) {
-			gotRoot, gotAddr, gotHelp := parseCommandLine(tt.args)
+			gotRoot, gotAddr, gotHelp, gotExit := parseCommandLine(tt.args)
+			_ = gotExit
 
 			if gotHelp != tt.wantHelp {
 				t.Errorf("parseCommandLine(`%v`) gotHelp = %v, want %v", cli, gotHelp, tt.wantHelp)
