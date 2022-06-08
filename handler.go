@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -24,8 +24,8 @@ var etagHeaders = []string{
 	"If-Unmodified-Since",
 }
 
-func noCache(h http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) {
+func noCache(h http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		// Delete any ETag headers that may have been set
 		for _, v := range etagHeaders {
 			if r.Header.Get(v) != "" {
@@ -33,14 +33,35 @@ func noCache(h http.Handler) http.Handler {
 			}
 		}
 
+		rw := &responseWriter{ResponseWriter: w}
+
 		// Set our NoCache headers
 		for k, v := range noCacheHeaders {
-			w.Header().Set(k, v)
+			rw.Header().Set(k, v)
 		}
 
-		fmt.Println(r.RequestURI)
-		h.ServeHTTP(w, r)
-	}
+		start := time.Now()
+		h.ServeHTTP(rw, r)
+		dur := time.Since(start)
 
-	return http.HandlerFunc(fn)
+		log.Printf(`"%s %s %s" %d %d %s`, r.Method, r.RequestURI, r.Proto, rw.status, rw.written, dur)
+	}
+}
+
+type responseWriter struct {
+	http.ResponseWriter
+
+	status  int
+	written int
+}
+
+func (rw *responseWriter) WriteHeader(code int) {
+	rw.status = code
+	rw.ResponseWriter.WriteHeader(code)
+}
+
+func (rw *responseWriter) Write(b []byte) (int, error) {
+	n, err := rw.ResponseWriter.Write(b)
+	rw.written = n
+	return n, err
 }
