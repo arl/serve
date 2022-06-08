@@ -1,5 +1,14 @@
 # Serve
 
+## Installation
+
+
+```
+go install github.com/arl/serve@latest
+```
+
+## Usage
+
 Like `python -m SimpleHTTPServer` but _simpler_.
 
     $ serve -h
