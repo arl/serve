@@ -1,51 +1,49 @@
 # Serve
 
+Like `python -m SimpleHTTPServer` but _simpler_!
+
 ## Installation
 
+    go install github.com/arl/serve@latest
 
-```
-go install github.com/arl/serve@latest
-```
 
 ## Usage
 
-Like `python -m SimpleHTTPServer` but _simpler_.
-
     $ serve -h
     Serves the content of a directory as HTTP
-    usage: serve [-h] [root] [[host]:port]
-        command summary
-            [root]         File server root directory, defaults to current directory
-            [[host]:port]  Address to listen on, defaults to "localhost:8000"
-                           "host" can be omitted to listen on all network interfaces.
-            -h/--help      This help text
+    usage: serve [-h] [dir] [addr]
+    parameters:
+        addr        Address to listen on. Defaults to "localhost:8000"
+                    Format is host:port where "host" can be omitted to listen on all
+                    network interfaces.
+        dir         File server root directory, defaults to current directory
+        -h/--help   Show this message
 
 
-Examples:
+Once started, `serve` logs HTTP requests as follows:
 
-* serve the current directory on localhost and default port (8000)
+    $ serve
+    [serve] serving . on http://localhost:8000/
+    [serve] "GET / HTTP/1.1" 0 7 58.398µs
+    [serve] "GET /index.html HTTP/1.1" 200 1592 3.958531ms
+    [serve] "GET /main.css HTTP/1.1" 200 821 109.286µs
 
-```
-$ serve
-```
-
-
-* serve `/foo/bar` on localhost and default port (8000)
-
-```
-$ serve /foo/bar
-```
+For example, the last line indicates that a HTTP/1.1 request to `main.css` has been 
+served, it ended with a 200 status, 821 bytes were served and that took 109µs.
 
 
-- serve the current directory on localhost and port 7777
+## Examples
 
-```
-$ serve /foo/bar :7777
-```
+* Serve the current directory on defaut address http://localhost:8000
+
+    serve
 
 
-- serve the current directory on localhost and port 7777
+* Serve current directory on http://\*:80 (all interfaces)
 
-```
-$ serve . :7777
-```
+    serve :80
+
+
+* Serve the /foo/bar directory on http://\*:7777 (all interfaces)
+
+    serve :7777 /foo/bar
