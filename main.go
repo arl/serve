@@ -19,17 +19,17 @@ const (
 const helpTxt = `Serves the content of a directory as HTTP
 usage: serve [-h] [dir] [addr]
 parameters:
-    dir         File server root directory, defaults to current directory
     addr        Address to listen on. Defaults to "` + defaultHostPort + `"
                 Format is host:port where "host" can be omitted to listen on all
                 network interfaces.
+    dir         File server root directory, defaults to current directory
     -h/--help   Show this message`
 
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("[serve] ")
-	root, addr, help, exit := parseCommandLine(os.Args[1:])
 
+	dir, addr, help, exit := parseCommandLine(os.Args[1:])
 	if help {
 		fmt.Fprintln(os.Stderr, helpTxt)
 		os.Exit(exit)
@@ -37,21 +37,26 @@ func main() {
 
 	host, port, err := net.SplitHostPort(addr)
 	if err != nil {
-		log.Println("Error:", err)
-		os.Exit(2)
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
 	}
 
 	if host == "" {
 		host = "*"
 	}
 
-	log.Println("serving", root, "on http://"+host+":"+port+"/")
-	panic(http.ListenAndServe(addr, noCache(http.FileServer(http.Dir(root)))))
+	if _, err := os.Stat(dir); err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+
+	log.Println("serving", dir, "on http://"+host+":"+port+"/")
+	panic(http.ListenAndServe(addr, noCache(http.FileServer(http.Dir(dir)))))
 }
 
 // parseCommandLine
-func parseCommandLine(args []string) (root, addr string, help bool, exit int) {
-	root = defaultRoot
+func parseCommandLine(args []string) (dir, addr string, help bool, exit int) {
+	dir = defaultRoot
 	addr = defaultHostPort
 
 	nargs := len(args)
@@ -63,11 +68,11 @@ func parseCommandLine(args []string) (root, addr string, help bool, exit int) {
 	case nargs > 2:
 		help = true
 		exit = 1
-	case nargs == 1: // just dir
-		root = args[0]
+	case nargs == 1: // just addr
+		addr = args[0]
 	default:
-		root = args[0]
-		addr = args[1]
+		addr = args[0]
+		dir = args[1]
 	}
 	return
 }
