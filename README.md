@@ -34,16 +34,20 @@ served, it ended with a 200 status, 821 bytes were served and that took 109µs.
 
 ## Examples
 
-* Serve the current directory on defaut address http://localhost:8000
+* Serve the current directory on defaut address `http://localhost:8000`
 
-    serve
+```    
+serve
+```
 
+* Serve current directory on `http://*:80` (all interfaces)
 
-* Serve current directory on http://\*:80 (all interfaces)
+```    
+serve :80
+```
 
-    serve :80
+* Serve the /foo/bar directory on `http://*:7777` (all interfaces)
 
-
-* Serve the /foo/bar directory on http://\*:7777 (all interfaces)
-
-    serve :7777 /foo/bar
+```    
+serve :7777 /foo/bar
+```
