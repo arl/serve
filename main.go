@@ -17,8 +17,8 @@ const (
 )
 
 const helpTxt = `Serves the content of a directory as HTTP
-usage: serve [-h] [dir] [addr]
-parameters:
+usage: serve [-h] [addr] [dir]
+options:
     addr        Address to listen on. Defaults to "` + defaultHostPort + `"
                 Format is host:port where "host" can be omitted to listen on all
                 network interfaces.
